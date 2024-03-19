@@ -11,6 +11,7 @@ import { UsersModule } from '@modules/users/users.module';
 import { RoomsModule } from '@modules/rooms/rooms.module';
 import { GamesModule } from '@modules/games/games.module';
 import { ChatsModule } from '@modules/chats/chats.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -24,10 +25,10 @@ import { ChatsModule } from '@modules/chats/chats.module';
     RoomsModule,
     GamesModule,
     ChatsModule,
+    LoggerModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
-
 })
 export class AppModule {
   constructor(private readonly dataSource: DataSource) {}

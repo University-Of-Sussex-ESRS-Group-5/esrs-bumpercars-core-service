@@ -4,11 +4,15 @@ import { join } from 'path';
 import { Config } from './types';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import * as ejs from 'ejs';
 
 export default (): Config => {
+  const configTemplate = readFileSync(join(__dirname, 'config.yaml'), 'utf8');
+  const configString = ejs.render(configTemplate);
+
   const config = plainToInstance(
     Config,
-    yaml.load(readFileSync(join(__dirname, 'config.yaml'), 'utf8')),
+    yaml.load(configString, { schema: yaml.JSON_SCHEMA }) as Config,
     { enableImplicitConversion: true },
   );
 

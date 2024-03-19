@@ -10,6 +10,8 @@ export class RedisIoAdapter extends IoAdapter {
   async connectToRedis(config: WebsocketConfig): Promise<void> {
     const pubClient = createClient({
       url: `redis://${config.host}:${config.port}`,
+      password: config.password,
+      username: config.username,
     });
     const subClient = pubClient.duplicate();
 

@@ -3,22 +3,26 @@ port: 3000
 
 database:
   type: 'postgres'
-  host: 'localhost'
+  host: <%= process.env.DATABASE_HOST %>
   port: '5432'
-  username: 'postgres'
-  password: 'postgres'
+  username: <%= process.env.DATABASE_USERNAME %>
+  password: <%= process.env.DATABASE_PASSWORD %>
   db_name: 'postgres'
 
 redis:
-  host: 'localhost'
-  port: 6379
+  host: <%= process.env.REDIS_HOST %>
+  port: 14703
+  username: <%= process.env.REDIS_USERNAME %>
+  password: <%= process.env.REDIS_PASSWORD %>
 
 websocketConfig:
-  host: 'localhost'
-  port: 6379
+  host: <%= process.env.REDIS_HOST %>
+  port: 14703
+  username: <%= process.env.REDIS_USERNAME %>
+  password: <%= process.env.REDIS_PASSWORD %>
 
 aws:
-  region: 'us-east-1'
-  accessKeyId: 'accessKeyId'
-  secretAccessKey: 'secretAccessKey' 
-  platformApplicationArn: 'platformApplicationArn'
+  region: <%= process.env.AWS_REGION %>
+  accessKeyId: <%= process.env.AWS_ACCESS_KEY %>
+  secretAccessKey: <%= process.env.AWS_SECRET_ACCESS_KEY %>
+  platformApplicationArn: <%= process.env.AWS_PLATFORM_APPLICATION_ARN %>

@@ -8,4 +8,12 @@ export class WebsocketConfig {
   @IsNumber()
   @IsNotEmpty()
   port: number;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  username: string;
 }

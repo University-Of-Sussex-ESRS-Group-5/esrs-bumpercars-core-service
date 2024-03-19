@@ -8,4 +8,12 @@ export class RedisConfig {
   @IsNumber()
   @IsNotEmpty()
   port: number;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  username: string;
 }
