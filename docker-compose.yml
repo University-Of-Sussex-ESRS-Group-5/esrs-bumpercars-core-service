@@ -5,8 +5,9 @@ services:
     container_name: redis
     image: redis:latest
     restart: always
+    command: --port 14703
     ports:
-      - "6379:6379"
+      - "14703:14703"
     volumes:
       - redis-data:/data
 
