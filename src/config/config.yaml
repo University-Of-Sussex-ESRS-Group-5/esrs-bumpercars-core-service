@@ -26,3 +26,7 @@ aws:
   accessKeyId: <%= process.env.AWS_ACCESS_KEY %>
   secretAccessKey: <%= process.env.AWS_SECRET_ACCESS_KEY %>
   platformApplicationArn: <%= process.env.AWS_PLATFORM_APPLICATION_ARN %>
+
+jwt:
+  secret: <%= process.env.JWT_SECRET %>
+  expireTime: '1d'

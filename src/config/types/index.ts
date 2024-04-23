@@ -4,6 +4,7 @@ import { DatabaseConfig } from './database';
 import { RedisConfig } from './redis';
 import { AwsConfig } from './aws';
 import { WebsocketConfig } from './websocket';
+import { JwtConfig } from './jwt';
 
 export enum AppEnv {
   Local = 'local',
@@ -36,4 +37,8 @@ export class Config {
   @ValidateNested()
   @IsNotEmpty()
   aws: AwsConfig;
+
+  @ValidateNested()
+  @IsNotEmpty()
+  jwt: JwtConfig;
 }
