@@ -6,7 +6,7 @@ phases:
       - echo Logging in to Amazon ECR Private...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 598725262638.dkr.ecr.us-east-1.amazonaws.com
       - echo Logging in to Amazon ECR Public...
-      - aws ecr-public get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin public.ecr.aws
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
       - REPOSITORY_URI=598725262638.dkr.ecr.us-east-1.amazonaws.com/esrs-bumpercars-core-service
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
