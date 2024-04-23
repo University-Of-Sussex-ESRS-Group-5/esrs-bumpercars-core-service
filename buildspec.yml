@@ -3,18 +3,21 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
+      - echo Logging in to Amazon ECR Private...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 598725262638.dkr.ecr.us-east-1.amazonaws.com
+      - echo Logging in to Amazon ECR Public...
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
       - REPOSITORY_URI=598725262638.dkr.ecr.us-east-1.amazonaws.com/esrs-bumpercars-core-service
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+
   post_build:
     commands:
       - echo Build completed on `date`
@@ -23,5 +26,6 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"esrs-bumpercars-core-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+
 artifacts:
     files: imagedefinitions.json
