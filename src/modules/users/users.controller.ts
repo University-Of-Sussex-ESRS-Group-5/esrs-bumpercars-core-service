@@ -75,4 +75,18 @@ export class UsersController {
     );
     return new ApiResult().success(dataResponse);
   }
+
+  @Post('/public-ranking')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Sign-in successful',
+    type: ApiResult,
+  })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getPublicRanking() {
+    const dataResponse = await this.usersService.getPublicRanking();
+    return new ApiResult().success(dataResponse);
+  }
 }

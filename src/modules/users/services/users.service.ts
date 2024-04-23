@@ -60,4 +60,13 @@ export class UsersService {
       token,
     };
   }
+
+  async getPublicRanking(): Promise<UserDTO[]> {
+    const users = await this.userRepository.find({
+      select: ['id', 'username', 'points'],
+      order: { points: 'DESC' },
+      take: 10,
+    });
+    return users;
+  }
 }
