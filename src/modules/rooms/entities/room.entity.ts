@@ -1,4 +1,13 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '@modules/users/entities/user.entity';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Room {
@@ -16,6 +25,10 @@ export class Room {
 
   @Column({ type: 'uuid', name: 'leader_id' })
   leaderId: string;
+
+  @ManyToOne(() => User, { eager: true })
+  @JoinColumn({ name: 'leader_id' })
+  leader: User;
 
   @CreateDateColumn({
     type: 'timestamp',
