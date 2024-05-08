@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiResponseFailModel } from '../common/model/api-result.model';
 import {
@@ -14,6 +14,9 @@ import {
   LoginUserWithUsernameReqDTO,
 } from './dtos/login-user.dto';
 import { LoginSuccessResp } from './dtos/login-success.dto';
+import { ForgetPasswordReqDTO } from './dtos/forget-password.dto';
+import { ResetPasswordReqDTO } from './dtos/reset-password.dto';
+
 
 @ApiTags('users')
 @Controller('users')
@@ -104,5 +107,38 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async ranking() {
     return new ApiResult().success(await this.usersService.getRanking());
+  }
+  @Post('forget-password')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Forget password request success',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ApiResponseFailModel,
+    description: 'Forget password request fail',
+  })
+  async forgetPassword(@Body() body: ForgetPasswordReqDTO) {
+    await this.usersService.forgetPassword(body.email);
+    return new ApiResult().success({
+      message: 'If a user with that email exists, we have sent them a password reset email.',
+    });
+  }
+
+  @Post('reset-password')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Password reset success',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ApiResponseFailModel,
+    description: 'Password reset fail',
+  })
+  async resetPassword(@Body() body: ResetPasswordReqDTO) {
+    await this.usersService.resetPassword(body.token, body.newPassword);
+    return new ApiResult().success({
+      message: 'Your password has been successfully reset.',
+    });
   }
 }
