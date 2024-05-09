@@ -13,6 +13,7 @@ import { JwtResponse } from '../dtos/login-success.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ResetTokenRepository } from '../repositories/reset-token.repository';
 import { ResetToken } from '../entities/reset-token.entity';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -176,8 +177,9 @@ export class UsersService {
       },
     });
   }
+
   private generateResetToken(): string {
-    const token = require('crypto').randomBytes(32).toString('hex');
+    const token = randomBytes(32).toString('hex');
     return token;
   }
 
