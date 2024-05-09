@@ -9,11 +9,11 @@ export class WebsocketConfig {
   @IsNotEmpty()
   port: number;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // password: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // username: string;
+  @IsString()
+  @IsNotEmpty()
+  username: string;
 }

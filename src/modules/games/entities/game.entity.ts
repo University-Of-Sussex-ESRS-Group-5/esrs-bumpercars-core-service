@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Game {
@@ -14,7 +8,7 @@ export class Game {
   @Column({ type: 'uuid', name: 'room_id' })
   roomId: string;
 
-  @Column({ type: 'int', name: 'game_number' })
+  @Column({ type: 'int', name: 'game_number'})
   gameNumber: number;
 
   @CreateDateColumn({

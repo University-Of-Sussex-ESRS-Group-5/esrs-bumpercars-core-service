@@ -8,8 +8,15 @@ import { Room } from '../rooms/entities/room.entity';
 import { User } from '../users/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Game, GameUser, Room, User])],
-  controllers: [GamesController],
-  providers: [GamesService],
+    imports: [
+        TypeOrmModule.forFeature([
+            Game,
+            GameUser,
+            Room,
+            User,
+        ]),
+    ],
+    controllers: [GamesController],
+    providers: [GamesService],
 })
-export class GamesModule {}
+export class GamesModule { }
