@@ -24,6 +24,7 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
       password: database.password,
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
+      migrationsRun: true,
       extra: {
         max: 30,
         charset: 'utf8mb4_unicode_ci',

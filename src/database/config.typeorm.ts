@@ -21,5 +21,6 @@ export const AppDataSource = new DataSource({
     charset: 'utf8mb4_unicode_ci',
   },
   synchronize: false,
+  migrationsRun: true,
   logging: true,
 } as DataSourceOptions);

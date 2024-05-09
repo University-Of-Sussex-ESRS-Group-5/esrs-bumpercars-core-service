@@ -2,7 +2,7 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM --platform=linux/amd64 node:18-alpine As development
+FROM --platform=linux/amd64 public.ecr.aws/docker/library/node:18-alpine As development
 
 WORKDIR /usr/src/app
 
@@ -18,7 +18,7 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM --platform=linux/amd64 node:18-alpine As build
+FROM --platform=linux/amd64 public.ecr.aws/docker/library/node:18-alpine As build
 
 WORKDIR /usr/src/app
 
@@ -40,7 +40,7 @@ USER node
 # PRODUCTION
 ###################
 
-FROM --platform=linux/amd64 node:18-alpine As production
+FROM --platform=linux/amd64 public.ecr.aws/docker/library/node:18-alpine As production
 
 EXPOSE 3000
 
