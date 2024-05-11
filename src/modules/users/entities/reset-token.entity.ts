@@ -23,6 +23,6 @@ export class ResetToken {
     @Column()
     expiresAt: Date;
 
-    @Column({ nullable: true })
-    resetToken: string | null;
+    @Column({ type: 'json', nullable: true })
+    resetToken: any | null;
 }
