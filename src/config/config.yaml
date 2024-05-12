@@ -11,13 +11,13 @@ database:
 
 redis:
   host: <%= process.env.REDIS_HOST %>
-  port: 6379
+  port: 19635
   username: <%= process.env.REDIS_USERNAME %>
   password: <%= process.env.REDIS_PASSWORD %>
 
 websocketConfig:
   host: <%= process.env.REDIS_HOST %>
-  port: 6379
+  port: 19635
   username: <%= process.env.REDIS_USERNAME %>
   password: <%= process.env.REDIS_PASSWORD %>
 
