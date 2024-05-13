@@ -17,6 +17,10 @@ phases:
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - echo Installing dependencies...
+      - npm install
+      - echo Running unit tests...
+      - npm test || echo "Unit tests failed but pipeline continues."
 
   post_build:
     commands:
@@ -26,8 +30,6 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"esrs-bumpercars-core-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - echo Running unit tests...
-      - npm test || echo "Unit tests failed but pipeline continues."
 
 artifacts:
     files: imagedefinitions.json
