@@ -46,7 +46,7 @@ export class UsersController {
 
   @Post('/register')
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     type: GetListUsersResDTO,
     description: 'Register successful',
   })
@@ -63,7 +63,7 @@ export class UsersController {
 
   @Post('/signin')
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     description: 'Sign-in successful',
     type: ApiResult,
   })
