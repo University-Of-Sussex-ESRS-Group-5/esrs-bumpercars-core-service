@@ -7,6 +7,8 @@ This project is the backend server of the core service for the "Bumper Cars" gam
 
 ```bash
 $ npm install
+$ npm install @nestjs-modules/mailer @nestjs/common @nestjs/core nodemailer
+
 ```
 
 ## Run PostgreSQL and Redis using Docker Compose
