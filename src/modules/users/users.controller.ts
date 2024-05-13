@@ -36,7 +36,7 @@ export class UsersController {
     description: 'get list users fail',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async getListUsers(@Query() query: GetListUsersReqDTO) {
     const users = await this.usersService.getListUsers(query);
@@ -84,7 +84,7 @@ export class UsersController {
     type: PublicRankingDTO,
   })
   @UsePipes(new ValidationPipe({ transform: true }))
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async getPublicRanking() {
     const dataResponse = await this.usersService.getPublicRanking();

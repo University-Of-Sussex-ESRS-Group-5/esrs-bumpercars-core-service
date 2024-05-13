@@ -69,4 +69,31 @@ export class UsersService {
     });
     return users;
   }
+
+    async getUserByEmail(email: string): Promise<User | null> {
+        return await this.userRepository.findOne({
+            where: {
+                email: email,
+            },
+            select: ['id', 'username', 'email', 'points', 'createdAt', 'updatedAt'],
+        });
+    }
+
+    async getUserById(id: string): Promise<User | null> {
+        return await this.userRepository.findOne({
+            where: {
+                id: id,
+            },
+            select: ['id', 'username', 'email', 'points', 'createdAt', 'updatedAt'],
+        });
+    }
+
+    async getRanking() {
+        return this.userRepository.find({
+            select: ['email', 'id', 'points', 'username'],
+            order: {
+                points: 'DESC',
+            },
+        });
+    }
 }

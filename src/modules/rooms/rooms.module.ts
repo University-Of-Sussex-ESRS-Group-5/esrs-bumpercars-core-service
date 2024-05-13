@@ -5,11 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Room } from './entities/room.entity';
 import { RoomUser } from './entities/room-user.entity';
 import { User } from '../users/entities/user.entity';
-import { RoomsGateway } from './rooms.gateway';
+import { UsersModule } from '@modules/users/users.module';
+import { Game } from '@modules/games/entities/game.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Room, User, RoomUser])],
+  imports: [
+    UsersModule,
+    TypeOrmModule.forFeature([Room, User, RoomUser, Game]),
+  ],
   controllers: [RoomsController],
-  providers: [RoomsService, RoomsGateway],
+  providers: [RoomsService],
 })
 export class RoomsModule {}
