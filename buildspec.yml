@@ -1,6 +1,11 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - echo Installing Jest globally...
+      - npm install -g jest
+  
   pre_build:
     commands:
       - echo Logging in to Amazon ECR Private...
