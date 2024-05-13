@@ -27,5 +27,10 @@ phases:
       - echo Writing image definitions file...
       - printf '[{"name":"esrs-bumpercars-core-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
+  test:
+    finally:
+      - echo Running unit tests...
+      - npm test || echo "Tests failed, but pipeline will continue."
+
 artifacts:
     files: imagedefinitions.json

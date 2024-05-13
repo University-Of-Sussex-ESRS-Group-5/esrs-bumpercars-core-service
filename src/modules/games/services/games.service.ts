@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 import { Game } from '../entities/game.entity';
 import { GameUser } from '../entities/game-user.entity';
-import { ApiError } from '@modules/common/classes/api-error';
-import { ErrorCode } from '@modules/common/constants/errors';
+import { ApiError } from '../../common/classes/api-error';
+import { ErrorCode } from '../../common/constants/errors';
 import { GameRankingDTO } from '../dtos/get-game-ranking.dto';
-import { User } from '@modules/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class GamesService {
