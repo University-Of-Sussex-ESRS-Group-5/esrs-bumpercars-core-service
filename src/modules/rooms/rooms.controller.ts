@@ -70,31 +70,31 @@ export class RoomsController {
     return this.roomsService.createRoom(createRoomDto);
   }
 
-  @Post('/join')
-  @ApiOperation({ summary: 'Join an existing room' })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully joined the room',
-    type: RoomUser,
-  })
-  @UsePipes(new ValidationPipe({ transform: true }))
-  //   @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  async joinRoom(@Body() joinRoomDto: JoinRoomDTO): Promise<RoomUser> {
-    return this.roomsService.joinRoom(joinRoomDto);
-  }
+  // @Post('/join')
+  // @ApiOperation({ summary: 'Join an existing room' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'Successfully joined the room',
+  //   type: RoomUser,
+  // })
+  // @UsePipes(new ValidationPipe({ transform: true }))
+  // //   @UseGuards(AuthGuard)
+  // @ApiBearerAuth()
+  // async joinRoom(@Body() joinRoomDto: JoinRoomDTO): Promise<RoomUser> {
+  //   return this.roomsService.joinRoom(joinRoomDto);
+  // }
 
-  @Patch('/change-car-color')
-  @ApiOperation({ summary: 'Change the car color for a user in a room' })
-  @ApiResponse({
-    status: 200,
-    description: 'Car color changed successfully',
-    type: RoomUser,
-  })
-  @UsePipes(new ValidationPipe({ transform: true }))
-  //   @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  async changeCarColor(@Body() dto: ChangeCarColorDTO): Promise<RoomUser> {
-    return this.roomsService.changeCarColor(dto);
-  }
+  // @Patch('/change-car-color')
+  // @ApiOperation({ summary: 'Change the car color for a user in a room' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'Car color changed successfully',
+  //   type: RoomUser,
+  // })
+  // @UsePipes(new ValidationPipe({ transform: true }))
+  // //   @UseGuards(AuthGuard)
+  // @ApiBearerAuth()
+  // async changeCarColor(@Body() dto: ChangeCarColorDTO): Promise<RoomUser> {
+  //   return this.roomsService.changeCarColor(dto);
+  // }
 }

@@ -22,6 +22,9 @@ export class RoomUser {
   @Column({ type: 'varchar', length: 255, name: 'car_color' })
   carColor: string;
 
+  @Column({ type: 'enum', enum: ['READY', 'WAITING'], default: 'WAITING' })
+  status: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',

@@ -52,14 +52,13 @@ export class RoomsService {
         },
       });
     } else {
-      // Attempt to find any public WAITING room if no code is provided
       room = await this.roomRepository.findOne({
         where: {
           type: 'PUBLIC',
           status: 'WAITING',
         },
         order: {
-          createdAt: 'ASC', // Join the oldest waiting room
+          createdAt: 'ASC',
         },
       });
     }
