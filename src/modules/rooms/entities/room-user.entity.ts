@@ -1,19 +1,25 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
-    name: 'room_user',
+  name: 'room_user',
 })
 export class RoomUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid', name: 'room_id'})
+  @Column({ type: 'uuid', name: 'room_id' })
   roomId: string;
 
-  @Column({ type: 'uuid', name: 'user_id'})
+  @Column({ type: 'uuid', name: 'user_id' })
   userId: string;
 
-  @Column({ type: 'varchar', length: 255, name: 'car_color'})
+  @Column({ type: 'varchar', length: 255, name: 'car_color' })
   carColor: string;
 
   @CreateDateColumn({
