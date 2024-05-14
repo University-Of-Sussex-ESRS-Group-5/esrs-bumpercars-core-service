@@ -6,9 +6,10 @@ import { Game } from './entities/game.entity';
 import { GameUser } from './entities/game-user.entity';
 import { Room } from '../rooms/entities/room.entity';
 import { User } from '../users/entities/user.entity';
+import { RoomUser } from '@modules/rooms/entities/room-user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Game, GameUser, Room, User])],
+  imports: [TypeOrmModule.forFeature([Game, GameUser, Room, User, RoomUser])],
   controllers: [GamesController],
   providers: [GamesService],
 })

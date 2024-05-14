@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -10,15 +11,19 @@ import {
   name: 'room_user',
 })
 export class RoomUser {
+  @ApiProperty({ type: String })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ApiProperty({ type: String })
   @Column({ type: 'uuid', name: 'room_id' })
   roomId: string;
 
+  @ApiProperty({ type: String })
   @Column({ type: 'uuid', name: 'user_id' })
   userId: string;
 
+  @ApiProperty({ type: String })
   @Column({ type: 'varchar', length: 255, name: 'car_color' })
   carColor: string;
 
@@ -32,6 +37,7 @@ export class RoomUser {
   })
   public createdAt: Date;
 
+  @ApiProperty({ type: Date })
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',

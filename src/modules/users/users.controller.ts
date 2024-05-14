@@ -17,8 +17,8 @@ import { UsersService } from './services/users.service';
 import { ApiResult } from '../common/classes/api-result';
 import { Body, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginDTO } from './dtos/login.dto';
-import { AuthGuard } from './auth.guard';
 import { PublicRankingDTO } from './dtos/get-public-ranking.dto';
+import { AuthGuard } from './auth.guard';
 import { ForgetPasswordReqDTO } from './dtos/forget-password.dto';
 import { ResetPasswordReqDTO } from './dtos/reset-password.dto';
 

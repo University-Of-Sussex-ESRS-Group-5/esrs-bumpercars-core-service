@@ -14,4 +14,4 @@ import { ResetTokenRepository } from './repositories/reset-token.repository';
     controllers: [UsersController],
     providers: [UsersService, ResetTokenRepository],
 })
-export class UsersModule { }
+export class UsersModule {}

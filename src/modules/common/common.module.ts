@@ -17,7 +17,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
-
     },
     CommonService,
     AppGateway,
