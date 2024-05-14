@@ -30,3 +30,11 @@ aws:
 jwt:
   secret: <%= process.env.JWT_SECRET %>
   expireTime: '1d'
+
+smtp:
+  smtp_host: <%= process.env.SMTP_HOST %>
+  smtp_port: 587
+  smtp_secure: 'false'
+  smtp_user: <%= process.env.SMTP_USER %>
+  smtp_pass: <%= process.env.SMTP_PASS %>
+  smtp_from: <%= process.env.SMTP_FROM %>
