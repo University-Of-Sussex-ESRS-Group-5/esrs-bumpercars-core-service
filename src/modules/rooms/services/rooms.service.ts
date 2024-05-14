@@ -105,74 +105,6 @@ export class RoomsService {
     }
   }
 
-  async createRoom(createRoomDto: CreateRoomDTO): Promise<Room> {
-    const newRoom = this.roomRepository.create({
-      ...createRoomDto,
-      code: this.generateRoomCode(), // Add this line to generate code
-    });
-    return this.roomRepository.save(newRoom);
-  }
-
-  private generateRoomCode(): string {
-    return Math.random().toString(36).substring(2, 10).toUpperCase();
-  }
-
-  async joinRoom(joinRoomDto: JoinRoomDTO): Promise<RoomUser> {
-    let room;
-    if (joinRoomDto.code) {
-      room = await this.roomRepository.findOne({
-        where: {
-          code: joinRoomDto.code,
-          status: 'WAITING',
-        },
-      });
-    } else {
-      room = await this.roomRepository.findOne({
-        where: {
-          type: 'PUBLIC',
-          status: 'WAITING',
-        },
-        order: {
-          createdAt: 'ASC',
-        },
-      });
-    }
-
-    if (!room) {
-      throw new ApiError(ErrorCode.ROOM_NOT_FOUND);
-    }
-
-    if (room.type === 'PRIVATE' && !joinRoomDto.code) {
-      throw new ApiError(ErrorCode.ROOM_NOT_FOUND);
-    }
-
-    const roomUser = this.roomUserRepository.create({
-      roomId: room.id,
-      userId: joinRoomDto.userId,
-      carColor: joinRoomDto.carColor,
-    });
-    await this.roomUserRepository.save(roomUser);
-
-    return roomUser;
-  }
-
-  async changeCarColor(dto: ChangeCarColorDTO): Promise<RoomUser> {
-    const roomUser = await this.roomUserRepository.findOne({
-      where: {
-        roomId: dto.roomId,
-        userId: dto.userId,
-      },
-    });
-
-    if (!roomUser) {
-      throw new ApiError(ErrorCode.ROOM_NOT_FOUND);
-    }
-
-    roomUser.carColor = dto.carColor;
-    await this.roomUserRepository.save(roomUser);
-    return roomUser;
-  }
-
 
     async checkIfRoomExists(roomId: any) {
         const roomExisted = await this.roomRepository.findOne({
@@ -276,5 +208,22 @@ export class RoomsService {
                 roomId: roomId,
             },
         });
+    }
+
+    async changeCarColor(dto: ChangeCarColorDTO): Promise<RoomUser> {
+        const roomUser = await this.roomUserRepository.findOne({
+            where: {
+                roomId: dto.roomId,
+                userId: dto.userId,
+            },
+        });
+
+        if (!roomUser) {
+            throw new ApiError(ErrorCode.ROOM_NOT_FOUND);
+        }
+
+        roomUser.carColor = dto.carColor;
+        await this.roomUserRepository.save(roomUser);
+        return roomUser;
     }
 }
