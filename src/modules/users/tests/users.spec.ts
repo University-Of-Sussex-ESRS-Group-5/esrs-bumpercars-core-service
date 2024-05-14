@@ -109,7 +109,10 @@ describe('UsersService', () => {
       };
       (userRepository.findOne as jest.Mock).mockResolvedValue(mockUser);
       const result = await service.signin('user1@example.com', 'password123');
-      expect(result).toEqual({ user: mockUser, token: 'mockToken' });
+      expect(result).toEqual({
+        user: { id: '1', username: 'user1', email: 'user1@example.com' },
+        token: 'mockToken',
+      });
       expect(bcrypt.compare).toHaveBeenCalledWith(
         'password123',
         'hashedPassword',

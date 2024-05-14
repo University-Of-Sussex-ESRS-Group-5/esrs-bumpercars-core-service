@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Chat } from '../entities/chat.entity';
 import { ChatsService } from '../services/chats.service';
+import { Room } from '../../rooms/entities/room.entity';
 
 describe('ChatsService', () => {
   let service: ChatsService;
@@ -18,6 +19,10 @@ describe('ChatsService', () => {
         {
           provide: getRepositoryToken(Chat),
           useValue: mockRepository,
+        },
+        {
+          provide: getRepositoryToken(Room),
+          useValue: {},
         },
       ],
     }).compile();

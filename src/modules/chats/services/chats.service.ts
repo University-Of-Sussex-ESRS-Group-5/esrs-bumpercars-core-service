@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, EntityManager, FindOptionsOrderValue } from 'typeorm';
 import { Chat } from '../entities/chat.entity';
-import { Room } from '@modules/rooms/entities/room.entity';
+import { Room } from '../../rooms/entities/room.entity';
 import { FetchChatDto } from '../dtos/chats.dto';
 
 @Injectable()
