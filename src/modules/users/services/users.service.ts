@@ -12,7 +12,6 @@ import { ResetTokenRepository } from '../repositories/reset-token.repository';
 import { ResetToken } from '../entities/reset-token.entity';
 import * as crypto from 'crypto';
 
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -62,7 +61,7 @@ export class UsersService {
     }
     return user;
   }
-  
+
   async getUserById(id: string): Promise<User> {
     // Use your user repository to find the user by id
     const user = await this.userRepository.findOne({ where: { id } });
@@ -71,11 +70,9 @@ export class UsersService {
     }
     return user;
   }
-  
-  
-  
 
   private generateResetToken(): string {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const token = require('crypto').randomBytes(32).toString('hex');
     return token;
   }
@@ -86,20 +83,23 @@ export class UsersService {
 
     // Assuming 'ResetToken' is a separate entity that stores the tokens
     const existingToken = await this.resetTokenRepository.findOne({
-      where: { userId: userId }
+      where: { userId: userId },
     });
     if (existingToken) {
       // If a token exists, update it
-      await this.resetTokenRepository.update({ userId: userId }, {
-        token: resetToken,
-        expiresAt: expirationTime
-      });
+      await this.resetTokenRepository.update(
+        { userId: userId },
+        {
+          token: resetToken,
+          expiresAt: expirationTime,
+        },
+      );
     } else {
       // If no token exists, create a new one
       await this.resetTokenRepository.insert({
         userId: userId,
         token: resetToken,
-        expiresAt: expirationTime
+        expiresAt: expirationTime,
       });
     }
   }
@@ -135,17 +135,20 @@ export class UsersService {
     });
   }
 
-  private async updateUserPassword(userId: string, newPassword: string): Promise<void> {
+  private async updateUserPassword(
+    userId: string,
+    newPassword: string,
+  ): Promise<void> {
     try {
-        // Implementation to update the user's password
-        // This should securely hash the new password before saving it
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+      // Implementation to update the user's password
+      // This should securely hash the new password before saving it
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        // Fetch the user from the database
-        const user = await this.getUserById(userId);
-        if (!user) {
-          console.error(`User with ID ${userId} not found.`);
-          throw new Error(`User with ID ${userId} not found.`);
+      // Fetch the user from the database
+      const user = await this.getUserById(userId);
+      if (!user) {
+        console.error(`User with ID ${userId} not found.`);
+        throw new Error(`User with ID ${userId} not found.`);
       }
 
       // Update the user's password
@@ -156,29 +159,29 @@ export class UsersService {
       console.error('Error updating user password:', error.message);
       // Handle the error appropriately (e.g., log it, return an error response, etc.)
       throw error;
+    }
   }
-}
 
-private async invalidateResetToken(token: string): Promise<void> {
-  try {
+  private async invalidateResetToken(token: string): Promise<void> {
+    try {
       // Fetch the user associated with the reset token from the database
       // const user = await this.userRepository.findOne({ where: { resetToken: token } });
       const user = await this.findResetToken(token);
 
-        if (!user) {
-            throw new Error(`User with reset token ${token} not found.`);
-        }
+      if (!user) {
+        throw new Error(`User with reset token ${token} not found.`);
+      }
 
-        // Invalidate the reset token
-        user.resetToken = null;
+      // Invalidate the reset token
+      user.resetToken = null;
 
-        // Save the updated user to the database
-        await this.userRepository.save(user);
+      // Save the updated user to the database
+      await this.userRepository.save(user);
     } catch (error) {
-        console.error('Error invalidating reset token:', error.message);
-          // Handle the error appropriately (e.g., log it, return an error response, etc.)
-          throw error;
-        }
+      console.error('Error invalidating reset token:', error.message);
+      // Handle the error appropriately (e.g., log it, return an error response, etc.)
+      throw error;
+    }
   }
 
   async register(
@@ -246,24 +249,6 @@ private async invalidateResetToken(token: string): Promise<void> {
       take: 10,
     });
     return users;
-  }
-
-  async getUserByEmail(email: string): Promise<User | null> {
-    return await this.userRepository.findOne({
-      where: {
-        email: email,
-      },
-      select: ['id', 'username', 'email', 'points', 'createdAt', 'updatedAt'],
-    });
-  }
-
-  async getUserById(id: string): Promise<User | null> {
-    return await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
-      select: ['id', 'username', 'email', 'points', 'createdAt', 'updatedAt'],
-    });
   }
 
   async getRanking() {
