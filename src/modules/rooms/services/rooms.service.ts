@@ -8,6 +8,8 @@ import { ErrorCode } from '@modules/common/constants/errors';
 import { IRoomStatus, IRoomType } from '../typings/room.type';
 import { Game } from '@modules/games/entities/game.entity';
 import { User } from '@modules/users/entities/user.entity';
+import { CreateRoomDTO } from '../dto/create-room.dto';
+import { JoinRoomDTO } from '../dto/join-room.dto';
 import { ChangeCarColorDTO } from '../dto/change-color.dto';
 
 @Injectable()
@@ -103,108 +105,55 @@ export class RoomsService {
     }
   }
 
-  async checkIfRoomExists(roomId: any) {
-    const roomExisted = await this.roomRepository.findOne({
-      where: {
-        id: roomId,
-      },
+  async createRoom(createRoomDto: CreateRoomDTO): Promise<Room> {
+    const newRoom = this.roomRepository.create({
+      ...createRoomDto,
+      code: this.generateRoomCode(), // Add this line to generate code
     });
-    if (roomExisted) return { status: true, data: roomExisted };
-    else return { status: false, data: null };
+    return this.roomRepository.save(newRoom);
   }
 
-  async checkIfUserFoundInRoom(roomId: any, userId: any) {
-    const userExisted = await this.roomUserRepository.findOne({
-      where: {
-        roomId: roomId,
-        userId: userId,
-      },
-    });
-    if (userExisted) return { status: true, data: userExisted };
-    else return { status: false, data: null };
+  private generateRoomCode(): string {
+    return Math.random().toString(36).substring(2, 10).toUpperCase();
   }
 
-  async joinRoom(
-    roomId: string,
-    userId: string,
-    carColor: string,
-  ): Promise<RoomUser> {
-    const { status: roomStatus } = await this.checkIfRoomExists(roomId);
-    const { status: userStatus } = await this.checkIfUserFoundInRoom(
-      roomId,
-      userId,
-    );
-
-    if (!roomStatus) {
-      throw new ConflictException(
-        'Room with id[' + roomId + '] does not exists',
-      );
+  async joinRoom(joinRoomDto: JoinRoomDTO): Promise<RoomUser> {
+    let room;
+    if (joinRoomDto.code) {
+      room = await this.roomRepository.findOne({
+        where: {
+          code: joinRoomDto.code,
+          status: 'WAITING',
+        },
+      });
+    } else {
+      room = await this.roomRepository.findOne({
+        where: {
+          type: 'PUBLIC',
+          status: 'WAITING',
+        },
+        order: {
+          createdAt: 'ASC',
+        },
+      });
     }
 
-    if (userStatus) {
-      throw new ConflictException('User already found in this room');
+    if (!room) {
+      throw new ApiError(ErrorCode.ROOM_NOT_FOUND);
     }
 
-    return await this.roomUserRepository.save({
-      carColor: carColor,
-      roomId: roomId,
-      userId: userId,
+    if (room.type === 'PRIVATE' && !joinRoomDto.code) {
+      throw new ApiError(ErrorCode.ROOM_NOT_FOUND);
+    }
+
+    const roomUser = this.roomUserRepository.create({
+      roomId: room.id,
+      userId: joinRoomDto.userId,
+      carColor: joinRoomDto.carColor,
     });
-  }
+    await this.roomUserRepository.save(roomUser);
 
-  async leaveRoom(roomId: string, userId: string) {
-    const { status: roomStatus } = await this.checkIfRoomExists(roomId);
-    const { status: userStatus } = await this.checkIfUserFoundInRoom(
-      roomId,
-      userId,
-    );
-
-    if (!roomStatus) {
-      throw new ConflictException(
-        'Room with id[' + roomId + '] does not exists',
-      );
-    }
-
-    if (!userStatus) {
-      throw new ConflictException('User not found in this room');
-    }
-
-    const { affected } = await this.roomUserRepository.delete({
-      roomId: roomId,
-      userId: userId,
-    });
-    if (affected && affected > 0) return true;
-    else return false;
-  }
-
-  async updateCarColor(userId: any, roomId: string, carColor: string) {
-    const roomUser = await this.roomUserRepository.findOne({
-      where: {
-        userId: userId,
-        roomId: roomId,
-      },
-    });
-
-    if (!roomUser) {
-      throw new ConflictException('User does not exists inside the room');
-    }
-
-    return await this.roomUserRepository.update(
-      {
-        id: roomUser['id'],
-      },
-      {
-        carColor: carColor,
-      },
-    );
-  }
-
-  async getAllGamesByRoomId(roomId: string) {
-    return this.gameRepository.find({
-      where: {
-        roomId: roomId,
-      },
-    });
+    return roomUser;
   }
 
   async changeCarColor(dto: ChangeCarColorDTO): Promise<RoomUser> {
@@ -223,4 +172,109 @@ export class RoomsService {
     await this.roomUserRepository.save(roomUser);
     return roomUser;
   }
+
+
+    async checkIfRoomExists(roomId: any) {
+        const roomExisted = await this.roomRepository.findOne({
+            where: {
+                id: roomId,
+            },
+        });
+        if (roomExisted) return { status: true, data: roomExisted };
+        else return { status: false, data: null };
+    }
+
+    async checkIfUserFoundInRoom(roomId: any, userId: any) {
+        const userExisted = await this.roomUserRepository.findOne({
+            where: {
+                roomId: roomId,
+                userId: userId,
+            },
+        });
+        if (userExisted) return { status: true, data: userExisted };
+        else return { status: false, data: null };
+    }
+
+    async joinRoom(
+        roomId: string,
+        userId: string,
+        carColor: string,
+    ): Promise<RoomUser> {
+        const { status: roomStatus } = await this.checkIfRoomExists(roomId);
+        const { status: userStatus } = await this.checkIfUserFoundInRoom(
+            roomId,
+            userId,
+        );
+
+        if (!roomStatus) {
+            throw new ConflictException(
+                'Room with id[' + roomId + '] does not exists',
+            );
+        }
+
+        if (userStatus) {
+            throw new ConflictException('User already found in this room');
+        }
+
+        return await this.roomUserRepository.save({
+            carColor: carColor,
+            roomId: roomId,
+            userId: userId,
+        });
+    }
+
+    async leaveRoom(roomId: string, userId: string) {
+        const { status: roomStatus } = await this.checkIfRoomExists(roomId);
+        const { status: userStatus } = await this.checkIfUserFoundInRoom(
+            roomId,
+            userId,
+        );
+
+        if (!roomStatus) {
+            throw new ConflictException(
+                'Room with id[' + roomId + '] does not exists',
+            );
+        }
+
+        if (!userStatus) {
+            throw new ConflictException('User not found in this room');
+        }
+
+        const { affected } = await this.roomUserRepository.delete({
+            roomId: roomId,
+            userId: userId,
+        });
+        if (affected && affected > 0) return true;
+        else return false;
+    }
+
+    async updateCarColor(userId: any, roomId: string, carColor: string) {
+        const roomUser = await this.roomUserRepository.findOne({
+            where: {
+                userId: userId,
+                roomId: roomId,
+            },
+        });
+
+        if (!roomUser) {
+            throw new ConflictException('User does not exists inside the room');
+        }
+
+        return await this.roomUserRepository.update(
+            {
+                id: roomUser['id'],
+            },
+            {
+                carColor: carColor,
+            },
+        );
+    }
+
+    async getAllGamesByRoomId(roomId: string) {
+        return this.gameRepository.find({
+            where: {
+                roomId: roomId,
+            },
+        });
+    }
 }
