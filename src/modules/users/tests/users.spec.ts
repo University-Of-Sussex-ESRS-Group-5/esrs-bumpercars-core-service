@@ -5,6 +5,8 @@ import { UsersService } from '../services/users.service';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CommonService } from '../../common/services/common.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { ResetTokenRepository } from '../repositories/reset-token.repository';
 
 jest.mock('bcrypt', () => ({
   hash: jest.fn().mockResolvedValue('hashedPassword'),
@@ -14,7 +16,9 @@ jest.mock('bcrypt', () => ({
 describe('UsersService', () => {
   let service: UsersService;
   let userRepository: Partial<Repository<User>>;
+  let resetTokenRepository: Partial<Repository<ResetTokenRepository>>;
   let commonService: Partial<CommonService>;
+  let mailerService: Partial<MailerService>;
 
   beforeEach(async () => {
     userRepository = {
@@ -25,6 +29,9 @@ describe('UsersService', () => {
     };
     commonService = {
       signToken: jest.fn().mockResolvedValue('mockToken'),
+    };
+    mailerService = {
+      sendMail: jest.fn().mockResolvedValue(null),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -37,6 +44,14 @@ describe('UsersService', () => {
         {
           provide: CommonService,
           useValue: commonService,
+        },
+        {
+          provide: MailerService,
+          useValue: mailerService,
+        },
+        {
+          provide: ResetTokenRepository,
+          useValue: resetTokenRepository,
         },
       ],
     }).compile();

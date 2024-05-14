@@ -14,7 +14,11 @@ import { ChatsModule } from '@modules/chats/chats.module';
 import { LoggerModule } from 'nestjs-pino';
 import { Config, RedisConfig } from '@config/types';
 import { CacheModule } from '@nestjs/cache-manager';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ResetToken } from '@modules/users/entities/reset-token.entity';
+import { ResetTokenRepository } from '@modules/users/repositories/reset-token.repository';
 import * as redisStore from 'cache-manager-redis-store';
+
 
 @Module({
   imports: [
@@ -43,6 +47,24 @@ import * as redisStore from 'cache-manager-redis-store';
       },
       inject: [ConfigService],
     }),
+    MailerModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: configService.get('SMTP_HOST'),
+          port: configService.get('SMTP_PORT'),
+          secure: configService.get('SMTP_SECURE'),
+          auth: {
+            user: configService.get('SMTP_USER'),
+            pass: configService.get('SMTP_PASS'),
+          },
+        },
+        defaults: {
+          from: configService.get('SMTP_FROM'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forFeature([ResetToken, ResetTokenRepository]),
   ],
   controllers: [AppController],
   providers: [AppService],
