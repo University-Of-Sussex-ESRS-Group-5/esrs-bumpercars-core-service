@@ -1,6 +1,6 @@
 import {IsEnum, IsUUID, IsString} from 'class-validator';
 import {ApiProperty} from '@nestjs/swagger';
-import { IRoomStatus, IRoomType } from '../typings/room.type';
+import {IRoomStatus, IRoomType} from '../typings/room.type';
 
 export class CreateRoomDTO {
     @ApiProperty({

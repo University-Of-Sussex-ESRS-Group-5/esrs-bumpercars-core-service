@@ -1,5 +1,5 @@
 import { ValidateNested, IsEnum, IsNotEmpty } from 'class-validator';
-import { Expose, Type } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { DatabaseConfig } from './database';
 import { RedisConfig } from './redis';
 import { AwsConfig } from './aws';

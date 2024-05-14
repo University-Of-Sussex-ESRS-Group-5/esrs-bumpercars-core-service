@@ -17,8 +17,8 @@ import { UsersService } from './services/users.service';
 import { ApiResult } from '../common/classes/api-result';
 import { Body, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginDTO } from './dtos/login.dto';
-import { AuthGuard } from './auth.guard';
 import { PublicRankingDTO } from './dtos/get-public-ranking.dto';
+import { AuthGuard } from './auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -36,7 +36,7 @@ export class UsersController {
     description: 'get list users fail',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async getListUsers(@Query() query: GetListUsersReqDTO) {
     const users = await this.usersService.getListUsers(query);
@@ -84,7 +84,7 @@ export class UsersController {
     type: PublicRankingDTO,
   })
   @UsePipes(new ValidationPipe({ transform: true }))
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async getPublicRanking() {
     const dataResponse = await this.usersService.getPublicRanking();
